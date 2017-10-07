@@ -1,0 +1,45 @@
+<html>
+    <head>
+    <title></title>
+        <!--<link rel='stylesheet' href='/stylesheets/style.css' />-->
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script type ="text/javascript" src="/socket.io/socket.io.js"></script>
+        <script type ="text/javascript">
+             $(document). ready(function (){
+                // this triggers the connection event in our server!
+                var socket  = io.connect();
+                $('#noRefresh').submit(function (e) {
+                    e.preventDefault();
+                    var data = {
+                        "name" : $("#name").val(),
+                        "location" : $("#location").val(),
+                        "language" : $("#language").val(),
+                        "comment" : $("#comment").val(),
+                    };
+                    
+                    socket.emit('posting_from', {data: data});
+                    //return false;
+                });
+                socket.on('random number', function (data) {
+                    $( "#updateArea" ).html( `${data.data2} <br> ${data.data}` );
+                    document.getElementById("noRefresh").reset();
+                });
+                // socket.on('updated message'), function (data) {
+                //     console.log("query info 2");
+                // };
+                
+                // we'll write all the socket stuff after the above line!
+            })
+        </script>
+    </head>
+    <body>
+        <div id = "updateArea"></div>
+        <form id="noRefresh">
+            Your name: <input type="text" name="name" id="name"><br>
+            Dojo Location: <input type="text" name="location" id="location"><br>
+            Favorite Language: <input type="text" name="language" id="language"><br>
+            Comment (optional): <input type="text" name="comment" id="comment"><br>
+            <input id="submit" type="Submit" value="Submit">
+          </form>
+    </body>
+</html>
